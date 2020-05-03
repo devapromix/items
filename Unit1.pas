@@ -1,4 +1,4 @@
-unit Unit1;
+﻿unit Unit1;
 
 interface
 
@@ -36,6 +36,7 @@ type
 
 var
   Form1: TForm1;
+  B: Boolean = True;
 
 implementation
 
@@ -84,8 +85,26 @@ begin
 end;
 
 procedure TForm1.Button5Click(Sender: TObject);
+var
+  I: Integer;
 begin
-  if ListBox4.ItemIndex >= 0 then
+  if B then
+  begin
+    // Создаем предмет и помещаем в инвентарь
+    case ListBox4.ItemIndex of
+      0:
+        Items.CreateItem(TStaff.Create);
+      1:
+        Items.CreateItem(TBook.Create);
+      2:
+        Items.CreateItem(TFlag.Create);
+    end;
+    // Обновляем список предметов в инвентаре
+    ListBox1.Clear;
+    for I := 0 to Items.Count - 1 do
+      ListBox1.Items.Append(Items.GetItem(I).Name);
+  end
+  else if ListBox4.ItemIndex >= 0 then
     ListBox2.Items.Append(ListBox4.Items[ListBox4.ItemIndex]);
 end;
 

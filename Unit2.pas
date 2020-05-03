@@ -1,4 +1,4 @@
-unit Unit2;
+Ôªøunit Unit2;
 
 interface
 
@@ -9,10 +9,12 @@ type
   TItem = class(TObject)
   private
     FName: string;
+    FEquipped: Boolean;
   public
     constructor Create;
     destructor Destroy; override;
     property Name: string read FName write FName;
+    property IsEquipped: Boolean read FEquipped write FEquipped;
   end;
 
 type
@@ -51,6 +53,7 @@ type
     destructor Destroy; override;
     procedure CreateItem(AItem: TItem);
     function Count: Integer;
+    function GetItem(I: Integer): TItem;
   end;
 
 implementation
@@ -60,6 +63,7 @@ implementation
 constructor TItem.Create;
 begin
   FName := 'Item';
+  FEquipped := False;
 end;
 
 destructor TItem.Destroy;
@@ -72,7 +76,7 @@ end;
 
 constructor TStaff.Create;
 begin
-  FName := 'œÓÒÓı';
+  FName := '–ü–æ—Å–æ—Ö';
 end;
 
 destructor TStaff.Destroy;
@@ -85,7 +89,7 @@ end;
 
 constructor TFlag.Create;
 begin
-  FName := '«Ì‡Ïˇ';
+  FName := '–ó–Ω–∞–º—è';
 end;
 
 destructor TFlag.Destroy;
@@ -98,7 +102,7 @@ end;
 
 constructor TBook.Create;
 begin
-  FName := ' ÌË„‡';
+  FName := '–ö–Ω–∏–≥–∞';
 end;
 
 destructor TBook.Destroy;
@@ -118,7 +122,6 @@ constructor TItems.Create;
 begin
   FItems := TObjectList<TItem>.Create();
   FItems.OwnsObjects := True;
-
 end;
 
 procedure TItems.CreateItem(AItem: TItem);
@@ -130,6 +133,11 @@ destructor TItems.Destroy;
 begin
   FItems.Free;
   inherited;
+end;
+
+function TItems.GetItem(I: Integer): TItem;
+begin
+  Result := FItems[I];
 end;
 
 end.
