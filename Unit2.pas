@@ -54,6 +54,7 @@ type
     procedure CreateItem(AItem: TItem);
     function Count: Integer;
     function GetItem(I: Integer): TItem;
+    procedure EquipItem(I: Integer);
   end;
 
 implementation
@@ -133,6 +134,11 @@ destructor TItems.Destroy;
 begin
   FItems.Free;
   inherited;
+end;
+
+procedure TItems.EquipItem(I: Integer);
+begin
+  FItems[I].FEquipped := True;
 end;
 
 function TItems.GetItem(I: Integer): TItem;

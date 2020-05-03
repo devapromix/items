@@ -30,6 +30,7 @@ type
     procedure FormDestroy(Sender: TObject);
   private
     { Private declarations }
+    procedure Refresh;
   public
     { Public declarations }
   end;
@@ -48,8 +49,31 @@ var
   Items: TItems;
 
 procedure TForm1.Button1Click(Sender: TObject);
+var
+  I, J: Integer;
 begin
-  if (ListBox1.ItemIndex >= 0) then
+  if B then
+  begin
+    // Надеть предмет
+    if (ListBox1.ItemIndex < 0) then
+      Exit;
+    J := 0;
+    for I := 0 to Items.Count - 1 do
+    begin
+      if not Items.GetItem(I).IsEquipped then
+      begin
+        if J = ListBox1.ItemIndex then
+        begin
+          Items.GetItem(I).IsEquipped := True;
+          Refresh;
+          Exit;
+        end;
+        J := J + 1;
+        Continue;
+      end;
+    end;
+  end
+  else if (ListBox1.ItemIndex >= 0) then
     if not(ListBox3.Items.Text.Contains(ListBox1.Items[ListBox1.ItemIndex])) then
     begin
       ListBox3.Items.Append(ListBox1.Items[ListBox1.ItemIndex]);
@@ -59,7 +83,14 @@ end;
 
 procedure TForm1.Button2Click(Sender: TObject);
 begin
-  if (ListBox3.ItemIndex >= 0) then
+  if B then
+  begin
+    if (ListBox3.ItemIndex < 0) then
+      Exit;
+    Items.GetItem(ListBox3.ItemIndex).IsEquipped := False;
+    Refresh;
+  end
+  else if (ListBox3.ItemIndex >= 0) then
   begin
     ListBox1.Items.Append(ListBox3.Items[ListBox3.ItemIndex]);
     ListBox3.Items.Delete(ListBox3.ItemIndex);
@@ -85,8 +116,6 @@ begin
 end;
 
 procedure TForm1.Button5Click(Sender: TObject);
-var
-  I: Integer;
 begin
   if B then
   begin
@@ -99,10 +128,7 @@ begin
       2:
         Items.CreateItem(TFlag.Create);
     end;
-    // Обновляем список предметов в инвентаре
-    ListBox1.Clear;
-    for I := 0 to Items.Count - 1 do
-      ListBox1.Items.Append(Items.GetItem(I).Name);
+    Refresh;
   end
   else if ListBox4.ItemIndex >= 0 then
     ListBox2.Items.Append(ListBox4.Items[ListBox4.ItemIndex]);
@@ -116,6 +142,20 @@ end;
 procedure TForm1.FormDestroy(Sender: TObject);
 begin
   Items.Free;
+end;
+
+procedure TForm1.Refresh;
+var
+  I: Integer;
+begin
+  // Обновляем список предметов в инвентаре
+  ListBox1.Clear;
+  ListBox3.Clear;
+  for I := 0 to Items.Count - 1 do
+    if Items.GetItem(I).IsEquipped then
+      ListBox3.Items.Append(Items.GetItem(I).Name)
+    else
+      ListBox1.Items.Append(Items.GetItem(I).Name);
 end;
 
 end.
