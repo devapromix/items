@@ -103,23 +103,18 @@ end;
 
 procedure TForm1.Button5Click(Sender: TObject);
 begin
-  if B then
-  begin
-    // Создаем предмет и помещаем в инвентарь
-    case ListBox4.ItemIndex of
-      0:
-        Items.CreateItem(TStaff.Create);
-      1:
-        Items.CreateItem(TBook.Create);
-      2:
-        Items.CreateItem(TFlag.Create);
-      3:
-        Items.CreateItem(TElixir.Create);
-    end;
-    Refresh;
-  end
-  else if ListBox4.ItemIndex >= 0 then
-    ListBox2.Items.Append(ListBox4.Items[ListBox4.ItemIndex]);
+  // Создаем предмет и помещаем в инвентарь
+  case ListBox4.ItemIndex of
+    0:
+      Items.CreateItem(TStaff.Create);
+    1:
+      Items.CreateItem(TBook.Create);
+    2:
+      Items.CreateItem(TFlag.Create);
+    3:
+      Items.CreateItem(TElixir.Create);
+  end;
+  Refresh;
 end;
 
 procedure TForm1.Button6Click(Sender: TObject);
@@ -127,7 +122,7 @@ begin
   // Выпить
   if (ListBox1.ItemIndex < 0) then
     Exit;
-  // TConsumItem().
+  TConsumItem(Items.GetItem(ListBox1.ItemIndex)).Quaff;
 
   { J := 0;
     for I := 0 to Items.Count - 1 do
@@ -159,15 +154,19 @@ end;
 procedure TForm1.Refresh;
 var
   I: Integer;
+  It: TEquipItem;
 begin
   // Обновляем список предметов в инвентаре
   ListBox1.Clear;
   ListBox3.Clear;
   for I := 0 to Items.Count - 1 do
-    if TEquipItem(Items.GetItem(I)).IsEquipped then
-      ListBox3.Items.Append(Items.GetItem(I).Name)
+  begin
+    It := TEquipItem(Items.GetItem(I));
+    if ({(It is IEquipable) and} (It.IsEquipped)) then
+      ListBox3.Items.Append(It.Name)
     else
-      ListBox1.Items.Append(Items.GetItem(I).Name);
+      ListBox1.Items.Append(It.Name);
+  end;
 end;
 
 end.
