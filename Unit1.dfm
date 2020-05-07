@@ -30,7 +30,7 @@ object Form1: TForm1
     Caption = #1055#1088#1077#1076#1084#1077#1090#1099' '#1085#1072' '#1079#1077#1084#1083#1077
   end
   object Label3: TLabel
-    Left = 368
+    Left = 352
     Top = 24
     Width = 99
     Height = 13
@@ -60,7 +60,7 @@ object Form1: TForm1
     TabOrder = 1
   end
   object ListBox3: TListBox
-    Left = 368
+    Left = 352
     Top = 43
     Width = 145
     Height = 153
@@ -121,7 +121,17 @@ object Form1: TForm1
     Items.Strings = (
       #1055#1086#1089#1086#1093
       #1050#1085#1080#1075#1072
-      #1047#1085#1072#1084#1103)
+      #1047#1085#1072#1084#1103
+      #1069#1083#1080#1082#1089#1080#1088)
     TabOrder = 8
+  end
+  object Button6: TButton
+    Left = 168
+    Top = 140
+    Width = 170
+    Height = 25
+    Caption = #1042#1099#1087#1080#1090#1100
+    TabOrder = 9
+    OnClick = Button6Click
   end
 end

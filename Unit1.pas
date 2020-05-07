@@ -21,6 +21,7 @@ type
     Button5: TButton;
     ListBox4: TListBox;
     Label4: TLabel;
+    Button6: TButton;
     procedure Button5Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);
     procedure Button4Click(Sender: TObject);
@@ -28,6 +29,7 @@ type
     procedure Button2Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure Button6Click(Sender: TObject);
   private
     { Private declarations }
     procedure Refresh;
@@ -52,49 +54,33 @@ procedure TForm1.Button1Click(Sender: TObject);
 var
   I, J: Integer;
 begin
-  if B then
+  // Надеть предмет
+  if (ListBox1.ItemIndex < 0) then
+    Exit;
+  J := 0;
+  for I := 0 to Items.Count - 1 do
   begin
-    // Надеть предмет
-    if (ListBox1.ItemIndex < 0) then
-      Exit;
-    J := 0;
-    for I := 0 to Items.Count - 1 do
+    if not TEquipItem(Items.GetItem(I)).IsEquipped then
     begin
-      if not Items.GetItem(I).IsEquipped then
+      if J = ListBox1.ItemIndex then
       begin
-        if J = ListBox1.ItemIndex then
-        begin
-          Items.GetItem(I).IsEquipped := True;
-          Refresh;
-          Exit;
-        end;
-        J := J + 1;
-        Continue;
+        TEquipItem(Items.GetItem(I)).IsEquipped := True;
+        Refresh;
+        Exit;
       end;
+      J := J + 1;
+      Continue;
     end;
-  end
-  else if (ListBox1.ItemIndex >= 0) then
-    if not(ListBox3.Items.Text.Contains(ListBox1.Items[ListBox1.ItemIndex])) then
-    begin
-      ListBox3.Items.Append(ListBox1.Items[ListBox1.ItemIndex]);
-      ListBox1.Items.Delete(ListBox1.ItemIndex);
-    end;
+  end;
 end;
 
 procedure TForm1.Button2Click(Sender: TObject);
 begin
-  if B then
-  begin
-    if (ListBox3.ItemIndex < 0) then
-      Exit;
-    Items.GetItem(ListBox3.ItemIndex).IsEquipped := False;
-    Refresh;
-  end
-  else if (ListBox3.ItemIndex >= 0) then
-  begin
-    ListBox1.Items.Append(ListBox3.Items[ListBox3.ItemIndex]);
-    ListBox3.Items.Delete(ListBox3.ItemIndex);
-  end;
+  // Снять
+  if (ListBox3.ItemIndex < 0) then
+    Exit;
+  TEquipItem(Items.GetItem(ListBox3.ItemIndex)).IsEquipped := False;
+  Refresh;
 end;
 
 procedure TForm1.Button3Click(Sender: TObject);
@@ -127,11 +113,37 @@ begin
         Items.CreateItem(TBook.Create);
       2:
         Items.CreateItem(TFlag.Create);
+      3:
+        Items.CreateItem(TElixir.Create);
     end;
     Refresh;
   end
   else if ListBox4.ItemIndex >= 0 then
     ListBox2.Items.Append(ListBox4.Items[ListBox4.ItemIndex]);
+end;
+
+procedure TForm1.Button6Click(Sender: TObject);
+begin
+  // Выпить
+  if (ListBox1.ItemIndex < 0) then
+    Exit;
+  // TConsumItem().
+
+  { J := 0;
+    for I := 0 to Items.Count - 1 do
+    begin
+    if not TEquipItem(Items.GetItem(I)).IsEquipped then
+    begin
+    if J = ListBox1.ItemIndex then
+    begin
+    TEquipItem(Items.GetItem(I)).IsEquipped := True;
+    Refresh;
+    Exit;
+    end;
+    J := J + 1;
+    Continue;
+    end;
+    end; }
 end;
 
 procedure TForm1.FormCreate(Sender: TObject);
@@ -152,7 +164,7 @@ begin
   ListBox1.Clear;
   ListBox3.Clear;
   for I := 0 to Items.Count - 1 do
-    if Items.GetItem(I).IsEquipped then
+    if TEquipItem(Items.GetItem(I)).IsEquipped then
       ListBox3.Items.Append(Items.GetItem(I).Name)
     else
       ListBox1.Items.Append(Items.GetItem(I).Name);

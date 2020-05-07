@@ -6,19 +6,33 @@ uses
   Generics.Collections;
 
 type
-  TItem = class(TObject)
+  TItem = class(TInterfacedObject, IInterface)
   private
     FName: string;
-    FEquipped: Boolean;
   public
     constructor Create;
     destructor Destroy; override;
     property Name: string read FName write FName;
+  end;
+
+type
+  IEquipable = interface
+    procedure Equip;
+  end;
+
+type
+  TEquipItem = class(TItem, IEquipable)
+  private
+    FEquipped: Boolean;
+  public
+    constructor Create;
+    destructor Destroy; override;
     property IsEquipped: Boolean read FEquipped write FEquipped;
+    procedure Equip;
   end;
 
 type
-  TStaff = class(TItem)
+  TStaff = class(TEquipItem)
   private
 
   public
@@ -27,7 +41,7 @@ type
   end;
 
 type
-  TFlag = class(TItem)
+  TFlag = class(TEquipItem)
   private
 
   public
@@ -36,12 +50,37 @@ type
   end;
 
 type
-  TBook = class(TItem)
+  TBook = class(TEquipItem)
   private
 
   public
     constructor Create;
     destructor Destroy; override;
+  end;
+
+type
+  IConsumable = interface
+    procedure Quaff;
+  end;
+
+type
+  TConsumItem = class(TItem, IConsumable)
+  private
+
+  public
+    constructor Create;
+    destructor Destroy; override;
+    procedure Quaff;
+  end;
+
+type
+  TElixir = class(TConsumItem)
+  private
+
+  public
+    constructor Create;
+    destructor Destroy; override;
+    procedure Quaff;
   end;
 
 type
@@ -64,13 +103,31 @@ implementation
 constructor TItem.Create;
 begin
   FName := 'Item';
-  FEquipped := False;
 end;
 
 destructor TItem.Destroy;
 begin
 
   inherited;
+end;
+
+{ TEquipItem }
+
+constructor TEquipItem.Create;
+begin
+  FName := 'EquipItem';
+  FEquipped := False;
+end;
+
+destructor TEquipItem.Destroy;
+begin
+
+  inherited;
+end;
+
+procedure TEquipItem.Equip;
+begin
+
 end;
 
 { TStaff }
@@ -112,6 +169,42 @@ begin
   inherited;
 end;
 
+{ TConsumItem }
+
+constructor TConsumItem.Create;
+begin
+  FName := 'ConsumItem';
+end;
+
+destructor TConsumItem.Destroy;
+begin
+
+  inherited;
+end;
+
+procedure TConsumItem.Quaff;
+begin
+
+end;
+
+{ TElixir }
+
+constructor TElixir.Create;
+begin
+  FName := 'Эликсир';
+end;
+
+destructor TElixir.Destroy;
+begin
+
+  inherited;
+end;
+
+procedure TElixir.Quaff;
+begin
+
+end;
+
 { TItems }
 
 function TItems.Count: Integer;
@@ -138,7 +231,7 @@ end;
 
 procedure TItems.EquipItem(I: Integer);
 begin
-  FItems[I].FEquipped := True;
+  TEquipItem(FItems[I]).FEquipped := True;
 end;
 
 function TItems.GetItem(I: Integer): TItem;
