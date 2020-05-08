@@ -120,9 +120,10 @@ end;
 procedure TForm1.Button6Click(Sender: TObject);
 begin
   // Выпить
-  if (ListBox1.ItemIndex < 0) then
-    Exit;
-  TConsumItem(Items.GetItem(ListBox1.ItemIndex)).Quaff;
+//  if (ListBox1.ItemIndex < 0) then
+//    Exit;
+//  TConsumItem(Items.GetItem(ListBox1.ItemIndex)).Quaff;
+  ShowMessage(TBook.ClassParent.ClassName);
 
   { J := 0;
     for I := 0 to Items.Count - 1 do
@@ -162,10 +163,11 @@ begin
   for I := 0 to Items.Count - 1 do
   begin
     It := TEquipItem(Items.GetItem(I));
-    if ({(It is IEquipable) and} (It.IsEquipped)) then
-      ListBox3.Items.Append(It.Name)
-    else
-      ListBox1.Items.Append(It.Name);
+    //if Supports( Listener, IExtendedListener, ExtListener ) then
+//    if ((It is IEquipable) { and (It.IsEquipped) } ) then
+//      ListBox3.Items.Append('I' + It.Name)
+//    else
+//      ListBox1.Items.Append(It.Name);
   end;
 end;
 

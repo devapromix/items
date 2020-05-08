@@ -1,5 +1,9 @@
 ﻿unit Unit2;
 
+// Предметы в Д1 -- http://alldisciples.ru/modules.php?name=Articles&pa=showarticle&artid=328
+// Предметы в Д2 -- http://alldisciples.ru/modules.php?name=Articles&pa=showarticle&artid=223
+// Список предм. -- https://www.ign.com/faqs/2005/disciples-ii-rise-of-the-elves-items-listfaq-677342
+
 interface
 
 uses
@@ -17,6 +21,7 @@ type
 
 type
   IEquipable = interface
+    ['{2B0D1176-5F70-4901-A0EE-35381E6ED51F}']
     procedure Equip;
   end;
 
@@ -60,6 +65,7 @@ type
 
 type
   IConsumable = interface
+    ['{BEBA6E68-015D-439D-9918-0CC708BBDEA3}']
     procedure Quaff;
   end;
 
@@ -97,6 +103,9 @@ type
   end;
 
 implementation
+
+uses
+  Vcl.Dialogs;
 
 { TItem }
 
